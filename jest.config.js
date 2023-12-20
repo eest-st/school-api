@@ -1,6 +1,17 @@
 const { defaults: tsjPreset } = require("ts-jest/presets");
 
 module.exports = {
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts", "!src/**/index.ts"],
+  coverageDirectory: "coverage",
+  coverageProvider: "v8",
+  reporters: [
+    "default",
+    [
+      "jest-html-reporters",
+      { fileName: "report.html", publicPath: "coverage/html-report" },
+    ],
+  ],
   preset: "ts-jest",
   moduleFileExtensions: ["ts", "js", "json"],
   transform: {
@@ -14,15 +25,16 @@ module.exports = {
     ...tsjPreset.transform,
   },
   testPathIgnorePatterns: ["dist"],
-  testMatch: ["**/__tests__/**/*.test.(ts|js)"],
+  testMatch: ["**/?(*.)+(spec|test).ts"],
   testEnvironment: "node",
   moduleNameMapper: {
-    "@/(.*)": "<rootDir>/src/$1",
+    "~/(.*)": "<rootDir>/src/$1",
   },
   watchPlugins: [
     "jest-watch-typeahead/filename",
     "jest-watch-typeahead/testname",
   ],
+  watchPathIgnorePatterns: ["/node_modules/", "/coverage/"],
   coverageThreshold: {
     global: {
       branches: 1,

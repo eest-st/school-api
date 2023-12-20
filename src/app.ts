@@ -1,12 +1,13 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import morgan from "morgan";
 import timeout from "connect-timeout";
+
 import CONFIG from "./config";
-import { expressPinoLogger } from "./helpers";
-import * as errorHandler from "@/middlewares/errorHandler";
-import routes from "@/routes";
+import routes from "./routes";
+
+import morganMiddleware from "./middlewares/morganMiddleware";
+import * as errorHandler from "~/middlewares/errorHandler";
 
 export const createApp = (): express.Application => {
   const app = express();
@@ -21,14 +22,13 @@ export const createApp = (): express.Application => {
   );
 
   if (CONFIG.APP.ENV !== "test") {
-    app.use(morgan("dev"));
-    app.use(expressPinoLogger());
+    app.use(morganMiddleware);
   }
 
   app.use(timeout(CONFIG.SERVER.TIMEOUT));
 
   // API Routes
-  app.use(`/api/${CONFIG.APP.VER}`, routes);
+  app.use("/api/v1", routes);
 
   // Error Middleware
   app.use(errorHandler.genericErrorHandler);

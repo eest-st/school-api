@@ -1,8 +1,6 @@
-import pkg from "../../package.json";
+import "dotenv/config";
 
-// https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv").config();
+import pkg from "../../package.json";
 
 const CONFIG = {
   APP: {

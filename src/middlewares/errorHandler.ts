@@ -5,7 +5,7 @@ import HttpStatus, {
   INTERNAL_SERVER_ERROR,
   REQUEST_TIMEOUT,
 } from "http-status/lib";
-import { TimeOutError } from "@/helpers/error";
+import { TimeOutError } from "~/helpers/error";
 
 /**
  * @description Error response middleware for 404 not found. This middleware function should be at the very bottom of the stack.

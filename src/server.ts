@@ -18,7 +18,7 @@ export const startServer = (app: e.Application): Server => {
     process.stdout.write(`⚙️ Application Environment: ${CONFIG.APP.ENV}\n`);
     process.stdout.write(`⏱ Started on: ${Date.now()}\n`);
     process.stdout.write(
-      `🚀 TEN-STACK-API Server ready at http://localhost:${CONFIG.APP.PORT}\n`,
+      `🚀 EEST-N1-API Server ready at http://localhost:${CONFIG.APP.PORT}\n`,
     );
   });
 };

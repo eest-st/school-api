@@ -1,5 +1,5 @@
 import httpStatus, { REQUEST_TIMEOUT } from "http-status/lib";
-import CONFIG from "@/config";
+import CONFIG from "~/config";
 
 class TimeOutError {
   readonly status: number;

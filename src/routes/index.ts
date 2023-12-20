@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { HomeController, appKeyValidator } from "@/components/home";
-import { sanitizer } from "@/helpers";
+import healthRoutes from "~/components/health/health-routes";
 
 const router = Router();
 
-router.get("/", sanitizer(appKeyValidator), HomeController.getAppInfo);
+router.use(healthRoutes);
 
 export default router;
