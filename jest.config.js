@@ -2,7 +2,12 @@ const { defaults: tsjPreset } = require("ts-jest/presets");
 
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts", "!src/**/index.ts"],
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.d.ts",
+    "!src/**/index.ts",
+    "!src/types/**/*.ts",
+  ],
   coverageDirectory: "coverage",
   coverageProvider: "v8",
   reporters: [
