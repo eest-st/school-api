@@ -1,5 +1,6 @@
+import { OK } from "http-status";
 import { SuperAgentTest } from "supertest";
-import { OK } from "http-status/lib";
+
 import { initAgent } from "~/helpers";
 
 let agent: SuperAgentTest;
