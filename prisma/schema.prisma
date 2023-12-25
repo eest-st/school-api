@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+enum Role {
+  ADMIN
+  PARENT
+  STUDENT
+  TEACHER
+}
+
+model School {
+  id        Int       @id @default(autoincrement())
+  name      String
+  address   String
+  students  Student[]
+  teachers  Teacher[] @relation("school_to_teacher")
+  grades    Grade[]
+  subjects  Subject[] @relation("school_to_subject")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("schools")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  username  String    @unique
+  email     String    @unique
+  phone     String
+  address   String
+  password  String
+  role      Role      @default(STUDENT)
+  students  Student[]
+  parents   Parent[]
+  teachers  Teacher[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Student {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id")
+  school    School    @relation(fields: [schoolId], references: [id])
+  schoolId  Int       @map("school_id")
+  parent    Parent?   @relation(fields: [parentId], references: [id])
+  parentId  Int?      @map("parent_id")
+  absences  Absence[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("students")
+}
+
+model Parent {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id")
+  students  Student[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("parents")
+}
+
+model Teacher {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @map("user_id")
+  schools   School[]  @relation("school_to_teacher")
+  subjects  Subject[] @relation("subject_to_teacher")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  absences  Absence[]
+
+  @@map("teachers")
+}
+
+model Grade {
+  id        Int       @id @default(autoincrement())
+  name      String
+  year      Int
+  school    School    @relation(fields: [schoolId], references: [id])
+  schoolId  Int       @map("school_id")
+  subjects  Subject[] @relation("grade_to_subject")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("grades")
+}
+
+model Subject {
+  id        Int       @id @default(autoincrement())
+  name      String
+  teachers  Teacher[] @relation("subject_to_teacher")
+  grades    Grade[]   @relation("grade_to_subject")
+  schools   School[]  @relation("school_to_subject")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("subjects")
+}
+
+model Absence {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  description String?
+  isJustified Boolean  @default(false) @map("is_justified")
+  teacher     Teacher? @relation(fields: [teacherId], references: [id])
+  teacherId   Int?     @map("teacher_id")
+  student     Student? @relation(fields: [studentId], references: [id])
+  studentId   Int?     @map("student_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
