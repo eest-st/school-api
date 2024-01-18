@@ -1,7 +1,8 @@
-import { CREATED, NOT_FOUND, UNAUTHORIZED } from "http-status";
+import { CREATED, UNAUTHORIZED } from "http-status";
 
 import { generateToken, logger } from "~/helpers";
 import { apiResponse } from "~/helpers/apiResponse";
+import { NotFoundException } from "~/helpers/error";
 import { compare, hash } from "~/utils/crypt";
 import * as authService from "./auth-services";
 
@@ -11,7 +12,7 @@ export const login = async (req: Req, res: Res, _next: NextFn) => {
     const user = await authService.getUserByUsername(username);
 
     if (!user) {
-      return res.status(NOT_FOUND).json({ message: "User not found" });
+      throw new NotFoundException();
     }
 
     const isPasswordValid = await compare(password, user.password);
@@ -24,7 +25,7 @@ export const login = async (req: Req, res: Res, _next: NextFn) => {
 
     logger.info(`User ${user.username} logged in`);
 
-    return res.status(200).json(apiResponse({ token }));
+    return res.status(200).json(apiResponse({ access_token: token }));
   } catch (error: any) {
     logger.error(error);
     return res.status(error.status || 500).json({ message: error.message });

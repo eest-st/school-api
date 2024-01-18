@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
 import HttpStatus, {
-  NOT_FOUND,
   INTERNAL_SERVER_ERROR,
+  NOT_FOUND,
   REQUEST_TIMEOUT,
 } from "http-status/lib";
 import { TimeOutError } from "~/helpers/error";
