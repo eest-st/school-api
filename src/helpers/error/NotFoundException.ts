@@ -4,11 +4,11 @@ class NotFoundException {
   readonly status: number;
   readonly message: string;
 
-  constructor() {
+  constructor(message?: string) {
     Object.setPrototypeOf(this, new.target.prototype);
 
     this.status = NOT_FOUND;
-    this.message = HttpStatus[NOT_FOUND] as string;
+    this.message = message || (HttpStatus[NOT_FOUND] as string);
   }
 }
 
